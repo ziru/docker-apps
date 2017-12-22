@@ -1,0 +1,34 @@
+version: '3.3'
+
+volumes:
+  data-db: {}
+
+services:
+  mongo:
+    image: mongo:latest
+    volumes:
+      - data-db:/data/db
+    command:
+      - mongod
+      - --storageEngine
+      - wiredTiger
+    ports:
+      - "27017:27017"
+
+  cli:
+    image: mongo:latest
+    command:
+      - mongo
+      - --host
+      - mongo
+    depends_on:
+      - mongo
+
+  express:
+    image: mongo-express:latest
+    # command:
+    #   - mongo-express
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
