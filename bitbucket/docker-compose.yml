@@ -1,0 +1,12 @@
+version: '2'
+volumes:
+  data: {}
+
+services:
+  bitbucket:
+    image: atlassian/bitbucket-server:latest
+    ports:
+      - "7990:7990"
+      - "7999:7999"
+    volumes:
+      - data:/var/atlassian/application-data/bitbucket

@@ -1,0 +1,83 @@
+version: '3.3'
+
+volumes:
+  es-data-0:
+    driver: local
+  es-data-1:
+    driver: local
+  es-data-2:
+    driver: local
+
+services:
+  es-0:
+    build: ../elasticsearch
+    image: elasticsearch-local
+    ports:
+      - "9200:9200"
+    cap_add:
+      - IPC_LOCK
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    environment:
+      - node.name=es-0
+      - node.master=true
+      - cluster.name=es.cluster.local
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - discovery.zen.ping.unicast.hosts=es-0,es-1,es-2
+      - discovery.zen.minimum_master_nodes=2
+    volumes:
+      - es-data-0:/usr/share/elasticsearch/data
+
+  es-1:
+    build: ../elasticsearch
+    image: elasticsearch-local
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - node.name=es-1
+      - cluster.name=es.cluster.local
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - discovery.zen.ping.unicast.hosts=es-0,es-1,es-2
+      - discovery.zen.minimum_master_nodes=2
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - es-data-1:/usr/share/elasticsearch/data
+  
+  es-2:
+    build: ../elasticsearch
+    image: elasticsearch-local
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - node.name=es-2
+      - cluster.name=es.cluster.local
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - discovery.zen.ping.unicast.hosts=es-0,es-1,es-2
+      - discovery.zen.minimum_master_nodes=2
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - es-data-2:/usr/share/elasticsearch/data
+
+  kibana:
+    image: kibana:latest
+    ports:
+      - "5601:5601"
+    links:
+      - es-0:elasticsearch

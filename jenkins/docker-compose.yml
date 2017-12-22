@@ -1,0 +1,42 @@
+version: '3'
+volumes:
+  data: {}
+  docker-server-data: {}
+
+services:
+  jenkins:
+    build: ./jenkins
+    ports:
+      - "8080:8080"
+    links:
+      - docker-server:docker
+    volumes:
+      - data:/var/jenkins_home
+      - ${HOME}/docker-data/jenkins/git_home:/git_home
+    environment:
+      JAVA_OPTS: "-Xmx512m"
+
+  slave-1:
+    build: ./slaves
+    image: jenkins_slave
+    links:
+      - docker-server:docker
+    volumes:
+      - ${HOME}/docker-data/jenkins/git_home:/git_home
+    environment:
+      - DOCKER_HOST=tcp://docker-server:2375
+
+  slave-2:
+    image: jenkins_slave
+    depends_on:
+      - slave-1
+    volumes:
+      - ${HOME}/docker-data/jenkins/git_home:/git_home
+    environment:
+      - DOCKER_HOST=tcp://docker-server:2375
+
+  docker-server:
+    image: docker:dind
+    privileged: true
+    volumes:
+      - docker-server-data:/var/lib/docker

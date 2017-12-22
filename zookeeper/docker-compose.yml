@@ -1,0 +1,40 @@
+version: '2'
+
+volumes:
+  zoo1-data: {}
+  zoo1-datalog: {}
+  zoo2-data: {}
+  zoo2-datalog: {}
+  zoo3-data: {}
+  zoo3-datalog: {}
+
+services:
+  zoo1:
+    image: zookeeper:latest
+    # restart: always
+    volumes:
+      - zoo1-data:/data
+      - zoo1-datalog:/datalog
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+
+  zoo2:
+    image: zookeeper:latest
+    # restart: always
+    volumes:
+      - zoo2-data:/data
+      - zoo2-datalog:/datalog
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+
+  zoo3:
+    image: zookeeper
+    # restart: always
+    volumes:
+      - zoo3-data:/data
+      - zoo3-datalog:/datalog
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888

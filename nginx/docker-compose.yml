@@ -1,0 +1,40 @@
+version: '3.3'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ${HOME}/html:/usr/share/nginx/html:ro
+      # - /host/path/nginx.conf:/etc/nginx/nginx.conf:ro
+  # Uncomment lines below to send log messages to EFK
+  #   logging:
+  #     driver: fluentd
+  #     options:
+  #       fluentd-address: docker.for.mac.localhost:24224
+  #       # fluentd-address: fluentd:24224
+  #       tag: nginx.access
+  #   depends_on:
+  #     - fluentd
+  #
+  # fluentd:
+  #   build: ./fluentd
+  #   ports:
+  #     - 24224:24224
+  #     - 24224:24224/udp
+  #     - 7890:7890
+  #   depends_on:
+  #     - elasticsearch
+  #
+  # elasticsearch:
+  #   image: elasticsearch
+  #   ports:
+  #     - 9200:9200
+  #
+  # kibana:
+  #   image: kibana
+  #   ports:
+  #     - 5601:5601
+  #   depends_on:
+  #     - elasticsearch

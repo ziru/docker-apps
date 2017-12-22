@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  jupyter:
+    image: jupyter/all-spark-notebook:latest
+    ports:
+      - "8888:8888"
+    volumes:
+      - /Users:/Users
+      - ${HOME}/Google Drive/dev/notebooks:/home/jovyan/notebooks

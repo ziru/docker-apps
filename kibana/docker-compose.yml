@@ -1,0 +1,18 @@
+version: '3'
+volumes:
+  elasticsearch-data: {}
+
+services:
+  elasticsearch:
+    image: elasticsearch:alpine
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+  kibana:
+    image: kibana:latest
+    ports:
+      - "5601:5601"

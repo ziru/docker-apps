@@ -1,0 +1,15 @@
+version: '2'
+
+volumes:
+  data: {}
+
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - data:/var/lib/mysql
+
