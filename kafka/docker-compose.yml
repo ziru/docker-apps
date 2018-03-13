@@ -1,20 +1,26 @@
-version: '3.2'
+version: '3'
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper
     ports:
-        - "2181:2181"
+      - 2181:2181
     environment:
+      # required
       - ZOOKEEPER_CLIENT_PORT=2181
+      # optional
+      - ZOOKEEPER_TICK_TIME=2000
+
   kafka:
     image: confluentinc/cp-kafka
     ports:
-      - "9092:9092"
+      - 9092:9092
     environment:
-      # - KAFKA_ADVERTISED_HOST_NAME=docker.for.mac.localhost
+      # required
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://docker.for.mac.localhost:9092
+      # optional
+      - KAFKA_BROKER_ID=1
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     depends_on:
       - zookeeper
-    # volumes:
-    #   - /var/run/docker.sock:/var/run/docker.sock
