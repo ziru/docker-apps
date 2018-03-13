@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  presto:
+    image: starburstdata/presto:0.188-e.0.1
+    ports:
+      - "8080:8080"

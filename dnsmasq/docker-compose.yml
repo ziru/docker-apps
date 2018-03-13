@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  dnsmasq:
+    image: andyshinn/dnsmasq:2.78
+    ports:
+      - "6653:53/tcp"
+      - "6653:53/udp"
+    cap_add:
+      - NET_ADMIN
+    environment:
+      SERVICE_NAME: dnsmasq
+    # command: "--address=/.${DOCKER_DNS_DOMAIN}/${DOCKER_MACHINE_IP}"
+    command: "--address=/.zz/192.168.0.177"

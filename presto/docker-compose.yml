@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  coordinator:
+    image: lewuathe/presto-coordinator
+    ports:
+      - "8080:8080"
+    container_name: "coordinator"
+  worker0:
+    image: lewuathe/presto-worker
+    container_name: "worker0"
+    ports:
+      - "8081:8081"
