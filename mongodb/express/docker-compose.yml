@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  express:
+    image: mongo-express:latest
+    # command:
+    # - mongo-express
+    # - -H
+    # - docker.for.mac.localhost
+    environment:
+    - ME_CONFIG_MONGODB_SERVER=docker.for.mac.localhost
+    ports:
+    - 8081:8081
