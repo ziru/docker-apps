@@ -8,6 +8,7 @@ services:
     image: mongo:latest
     volumes:
       - data-db:/data/db
+      # - .:/mnt
     command:
       - mongod
       - --storageEngine
