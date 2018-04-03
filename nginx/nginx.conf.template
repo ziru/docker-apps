@@ -1,0 +1,14 @@
+events {}
+
+
+http {
+  server {
+    location / {
+      # proxy_pass http://httpbin.org/get;
+      proxy_pass https://echo.websocket.org;
+      proxy_set_header Connection Upgrade;
+      proxy_set_header Upgrade websocket;
+      proxy_http_version 1.1;
+    }
+  }
+}
