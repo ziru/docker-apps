@@ -1,4 +1,4 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.0.0
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.2.3
 
 # Remove the pre-bundled X-Pack plug-in
 RUN /usr/share/elasticsearch/bin/elasticsearch-plugin remove x-pack
