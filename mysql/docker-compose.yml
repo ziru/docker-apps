@@ -14,3 +14,8 @@ services:
     # - MYSQL_PASSWORD=test
     volumes:
     - data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
