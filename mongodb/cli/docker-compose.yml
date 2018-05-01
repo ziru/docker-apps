@@ -6,4 +6,4 @@ services:
     command:
     - mongo
     - --host
-    - host.docker.local
+    - host.docker.internal

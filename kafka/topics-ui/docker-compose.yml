@@ -15,6 +15,6 @@ services:
     - 8082:8082
     environment:
     # required
-    - KAFKA_REST_HOST_NAME=host.docker.local
-    - KAFKA_REST_ZOOKEEPER_CONNECT=host.docker.local:2181
+    - KAFKA_REST_HOST_NAME=host.docker.internal
+    - KAFKA_REST_ZOOKEEPER_CONNECT=host.docker.internal:2181
     # - ACCESS_CONTROL_ALLOW_ORIGIN_DEFAULT=*

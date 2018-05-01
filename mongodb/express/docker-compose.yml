@@ -4,6 +4,6 @@ services:
   express:
     image: mongo-express:latest
     environment:
-    - ME_CONFIG_MONGODB_SERVER=host.docker.local
+    - ME_CONFIG_MONGODB_SERVER=host.docker.internal
     ports:
     - 8081:8081

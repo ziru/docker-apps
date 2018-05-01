@@ -6,4 +6,4 @@ services:
     ports:
     - 8081:8081
     environment:
-    - REDIS_HOSTS=local:host.docker.local:6379
+    - REDIS_HOSTS=local:host.docker.internal:6379
