@@ -9,9 +9,9 @@ services:
     build: ../elasticsearch
     image: elasticsearch-local
     ports:
-      - "9200:9200"
+    - 9200:9200
     cap_add:
-      - IPC_LOCK
+    - IPC_LOCK
     ulimits:
       memlock:
         soft: -1
@@ -20,20 +20,27 @@ services:
         soft: 65536
         hard: 65536
     environment:
-      - node.name=es-0
-      - node.master=true
-      - cluster.name=es.cluster.local
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    - node.name=es-0
+    - node.master=true
+    - cluster.name=es.cluster.local
+    - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
     volumes:
-      - es-data-0:/usr/share/elasticsearch/data
+    - es-data-0:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
+      interval: 15s
+      timeout: 30s
+      retries: 5
 
   kibana:
     build: ../kibana
     image: kibana-local
     ports:
-      - "5601:5601"
+    - 5601:5601
     links:
-      - es-0:elasticsearch
+    - es-0:elasticsearch
+    depends_on:
+    - es-0
 
   # jupyter service to learn ES for Spark
   # jupyter:
