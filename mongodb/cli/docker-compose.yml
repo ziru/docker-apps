@@ -4,6 +4,6 @@ services:
   cli:
     image: mongo:latest
     command:
-      - mongo
-      - --host
-      - docker.for.mac.localhost
+    - mongo
+    - --host
+    - host.docker.local

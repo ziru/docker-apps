@@ -4,25 +4,25 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper
     ports:
-      - 2181:2181
+    - 2181:2181
     environment:
-      # required
-      - ZOOKEEPER_CLIENT_PORT=2181
-      # optional
-      - ZOOKEEPER_TICK_TIME=2000
+    # required
+    - ZOOKEEPER_CLIENT_PORT=2181
+    # optional
+    - ZOOKEEPER_TICK_TIME=2000
 
   kafka:
     image: confluentinc/cp-kafka
     ports:
-      - 9092:9092
-      # - 9999:9999
+    - 9092:9092
+    # - 9999:9999
     environment:
-      # required
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://docker.for.mac.localhost:9092
-      # optional
-      - KAFKA_BROKER_ID=1
-      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
-      # - KAFKA_JMX_PORT=9999
+    # required
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://host.docker.local:9092
+    # optional
+    - KAFKA_BROKER_ID=1
+    - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    # - KAFKA_JMX_PORT=9999
     depends_on:
-      - zookeeper
+    - zookeeper

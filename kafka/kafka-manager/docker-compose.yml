@@ -3,7 +3,7 @@ services:
   kafka-manager:
     image: sheepkiller/kafka-manager
     ports:
-      - "9000:9000"
+    - 9000:9000
     environment:
-      ZK_HOSTS: "docker.for.mac.localhost:2181"
-      JAVA_OPTS: '-Xmx256m -Xms256m'
+    - ZK_HOSTS=host.docker.internal:2181
+    - JAVA_OPTS=-Xmx256m -Xms256m

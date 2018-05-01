@@ -4,6 +4,6 @@ services:
   kibana:
     image: kibana:5.1.2
     ports:
-      - "5601:5601"
+    - "5601:5601"
     environment:
-      ELASTICSEARCH_URL: http://docker.for.mac.localhost:9200
+    ELASTICSEARCH_URL=http://host.docker.local:9200

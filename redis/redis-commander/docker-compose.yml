@@ -1,9 +1,9 @@
 version: '3'
+
 services:
   redis-commander:
     image: rediscommander/redis-commander:latest
-    # restart: always
-    environment:
-    - REDIS_HOSTS=local:docker.for.mac.localhost:6379
     ports:
     - 8081:8081
+    environment:
+    - REDIS_HOSTS=local:host.docker.local:6379
