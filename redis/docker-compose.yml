@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 volumes:
   data: {}
@@ -7,17 +7,11 @@ services:
   redis:
     image: redis:alpine
     ports:
-      - "6379:6379"
+    - 6379:6379
     volumes:
-      - data:/data
-
-  redis-cli:
-    image: redis:alpine
-    links:
-      - redis:redis
-    command:
-      - redis-cli
-      - -h
-      - redis
-      - -p
-      - '6379'
+    - data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10

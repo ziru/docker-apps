@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  redis-cli:
+    image: redis:alpine
+    command:
+    - redis-cli
+    - -h
+    - host.docker.internal
+    - -p
+    - '6379'
