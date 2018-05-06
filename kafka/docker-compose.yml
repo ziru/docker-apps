@@ -30,7 +30,7 @@ services:
     environment:
     # required
     - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://docker.for.mac.localhost:9092
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://host.docker.internal:9092
     # optional
     - KAFKA_BROKER_ID=1
     - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
