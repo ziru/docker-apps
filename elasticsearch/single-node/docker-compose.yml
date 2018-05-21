@@ -5,8 +5,7 @@ volumes:
 
 services:
   es-0:
-    build: ../elasticsearch
-    image: elasticsearch-local
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4
     ports:
     - 9200:9200
     cap_add:
@@ -32,8 +31,7 @@ services:
       retries: 5
 
   kibana:
-    build: ../kibana
-    image: kibana-local
+    image: docker.elastic.co/kibana/kibana-oss:6.2.4
     ports:
     - 5601:5601
     environment:

@@ -1,7 +1,4 @@
-FROM docker.elastic.co/kibana/kibana:6.2.3
-
-# Remove the pre-bundled X-Pack plug-in
-RUN /usr/share/kibana/bin/kibana-plugin remove x-pack
+FROM docker.elastic.co/kibana/kibana-oss:6.2.4
 
 # Overwrite the default configuration
 COPY kibana.yml /usr/share/kibana/config/
