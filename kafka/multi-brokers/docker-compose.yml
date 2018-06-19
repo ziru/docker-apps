@@ -1,0 +1,93 @@
+version: '3'
+
+volumes:
+  zk-data: {}
+  kafka-0-data: {}
+  kafka-1-data: {}
+  kafka-2-data: {}
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    ports:
+    - 2181:2181
+    environment:
+    # required
+    - ZOOKEEPER_CLIENT_PORT=2181
+    # optional
+    - ZOOKEEPER_TICK_TIME=2000
+    volumes:
+    - zk-data:/var/lib/zookeeper/data
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc -w 2 localhost 2181"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  kafka-0:
+    image: confluentinc/cp-kafka
+    environment:
+    # required
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-0:9092
+    # optional
+    - KAFKA_BROKER_ID=0
+    - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3
+    # - KAFKA_JMX_PORT=9999
+    volumes:
+    - kafka-0-data:/var/lib/kafka/data
+    depends_on:
+    - zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --zookeeper zookeeper:2181 --list"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  kafka-1:
+    image: confluentinc/cp-kafka
+    environment:
+    # required
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092
+    # optional
+    - KAFKA_BROKER_ID=1
+    - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3
+    # - KAFKA_JMX_PORT=9999
+    volumes:
+    - kafka-1-data:/var/lib/kafka/data
+    depends_on:
+    - zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --zookeeper zookeeper:2181 --list"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  kafka-2:
+    image: confluentinc/cp-kafka
+    environment:
+    # required
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-2:9092
+    # optional
+    - KAFKA_BROKER_ID=2
+    - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=3
+    # - KAFKA_JMX_PORT=9999
+    volumes:
+    - kafka-2-data:/var/lib/kafka/data
+    depends_on:
+    - zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --zookeeper zookeeper:2181 --list"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    ports:
+    - 9000:9000
+    environment:
+    - ZK_HOSTS=zookeeper:2181
+    - JAVA_OPTS=-Xmx256m -Xms256m

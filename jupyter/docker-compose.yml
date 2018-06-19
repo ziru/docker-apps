@@ -3,8 +3,13 @@ version: '3.3'
 services:
   jupyter:
     image: jupyter/base-notebook:latest
+    command:
+    - start-notebook.sh
+    - --NotebookApp.password=''
+    - --NotebookApp.token=''
+    - --NotebookApp.allow_origin='*'
     ports:
       - "8888:8888"
     volumes:
       - /Users:/Users
-      - ${HOME}/Google Drive/dev/notebooks:/home/jovyan/notebooks
+      - ${HOME}/Google Drive/dev/jupyter/notebooks:/home/jovyan/work
