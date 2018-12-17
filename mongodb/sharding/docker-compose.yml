@@ -1,0 +1,182 @@
+version: '3'
+
+volumes:
+  config-1-data: {}
+  config-2-data: {}
+  config-3-data: {}
+  s1-n1-data: {}
+  s1-n2-data: {}
+  s1-n3-data: {}
+  s2-n1-data: {}
+  s2-n2-data: {}
+  s2-n3-data: {}
+
+services:
+  mongos:
+    image: mongo:4
+    command:
+    - mongos
+    - --configdb
+    - configRS/config-1:27017,config-2:27017,config-3:27017
+    - --bind_ip
+    - 0.0.0.0
+    ports:
+    - 27017:27017
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  config-1:
+    image: mongo:4
+    volumes:
+    - config-1-data:/data/db
+    command:
+    - mongod
+    - --configsvr
+    - --replSet
+    - configRS
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    
+  config-2:
+    image: mongo:4
+    volumes:
+    - config-2-data:/data/db
+    command:
+    - mongod
+    - --configsvr
+    - --replSet
+    - configRS
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  config-3:
+    image: mongo:4
+    volumes:
+    - config-3-data:/data/db
+    command:
+    - mongod
+    - --configsvr
+    - --replSet
+    - configRS 
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  s1-n1:
+    image: mongo:4
+    volumes:
+    - s1-n1-data:/data/db
+    command:
+    - mongod
+    - --shardsvr
+    - --replSet
+    - s1
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  s1-n2:
+    image: mongo:4
+    volumes:
+    - s1-n2-data:/data/db
+    command:
+    - mongod
+    - --shardsvr
+    - --replSet
+    - s1
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  s1-n3:
+    image: mongo:4
+    volumes:
+    - s1-n3-data:/data/db
+    command:
+    - mongod
+    - --shardsvr
+    - --replSet
+    - s1
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  s2-n1:
+    image: mongo:4
+    volumes:
+    - s2-n1-data:/data/db
+    command:
+    - mongod
+    - --shardsvr
+    - --replSet
+    - s2
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  s2-n2:
+    image: mongo:4
+    volumes:
+    - s2-n2-data:/data/db
+    command:
+    - mongod
+    - --shardsvr
+    - --replSet
+    - s2
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  s2-n3:
+    image: mongo:4
+    volumes:
+    - s2-n3-data:/data/db
+    command:
+    - mongod
+    - --shardsvr
+    - --replSet
+    - s2
+    - --port
+    - "27017"
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

@@ -1,0 +1,58 @@
+version: '3'
+
+volumes:
+  data-1: {}
+  data-2: {}
+  data-3: {}
+
+services:
+  mongo-1:
+    image: mongo:4
+    ports:
+    - 27017:27017
+    volumes:
+    - data-1:/data/db
+    # - .:/mnt
+    command:
+    - mongod
+    - --replSet
+    - myReplSet
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongo-2:
+    image: mongo:4
+    ports:
+    - 27018:27017
+    volumes:
+    - data-2:/data/db
+    # - .:/mnt
+    command:
+    - mongod
+    - --replSet
+    - myReplSet
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongo-3:
+    image: mongo:4
+    ports:
+    - 27019:27017
+    volumes:
+    - data-3:/data/db
+    # - .:/mnt
+    command:
+    - mongod
+    - --replSet
+    - myReplSet
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'db.stats().ok' | mongo localhost:27017 --quiet"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
