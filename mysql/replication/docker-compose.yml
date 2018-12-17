@@ -1,0 +1,40 @@
+version: '3'
+
+volumes:
+  master-data: {}
+  slave-data: {}
+
+services:
+  master:
+    image: mysql:5.6
+    ports:
+    - 3306:3306
+    environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    - MYSQL_USER=test
+    # - MYSQL_PASSWORD=test
+    volumes:
+    - master-data:/var/lib/mysql
+    - ./my.cnf.master:/etc/mysql/conf.d/my.cnf
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  slave:
+    image: mysql:5.6
+    ports:
+    - 13306:3306
+    environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    - MYSQL_USER=test
+    # - MYSQL_PASSWORD=test
+    volumes:
+    - slave-data:/var/lib/mysql
+    - ./my.cnf.slave:/etc/mysql/conf.d/my.cnf
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
