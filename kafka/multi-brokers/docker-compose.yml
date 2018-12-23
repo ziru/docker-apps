@@ -10,7 +10,7 @@ volumes:
 
 services:
   zk-1:
-    image: confluentinc/cp-zookeeper:5.1.0
+    image: confluentinc/cp-zookeeper
     ports:
     - 2181:2181
     environment:
@@ -29,7 +29,7 @@ services:
       retries: 5
 
   zk-2:
-    image: confluentinc/cp-zookeeper:5.1.0
+    image: confluentinc/cp-zookeeper
     ports:
     - 12181:2181
     environment:
@@ -48,7 +48,7 @@ services:
       retries: 5
 
   zk-3:
-    image: confluentinc/cp-zookeeper:5.1.0
+    image: confluentinc/cp-zookeeper
     ports:
     - 22181:2181
     environment:
@@ -67,14 +67,15 @@ services:
       retries: 5
 
   kafka-1:
-    image: confluentinc/cp-kafka:5.1.0
+    build: ./kafka-prometheus
     ports:
     - 9092:9092
+    - 5556:5556
     environment:
     # required
     - KAFKA_ZOOKEEPER_CONNECT=zk-1:2181,zk-2:2181,zk-3:2181
     - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
-    - KAFKA_ADVERTISED_LISTENERS=INTERNAL_PLAINTEXT://kafka-1:9093,EXTERNAL_PLAINTEXT://localhost:9092
+    - KAFKA_ADVERTISED_LISTENERS=INTERNAL_PLAINTEXT://kafka-1:9093,EXTERNAL_PLAINTEXT://host.docker.internal:9092
     - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL_PLAINTEXT
     - KAFKA_LISTENERS=INTERNAL_PLAINTEXT://0.0.0.0:9093,EXTERNAL_PLAINTEXT://0.0.0.0:9092
     - KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE=false
@@ -84,18 +85,21 @@ services:
     - KAFKA_DEFAULT_REPLICATION_FACTOR=3
     - KAFKA_NUM_PARTITIONS=3
     # - KAFKA_JMX_PORT=9999
+    - EXTRA_ARGS=-javaagent:/usr/local/share/jars/jmx_prometheus_javaagent-0.3.1.jar=5556:/opt/jmx_exporter/config.yml
     volumes:
     - kafka-1-data:/var/lib/kafka/data
+    - ./jmx_exporter/config.yml:/opt/jmx_exporter/config.yml
 
   kafka-2:
-    image: confluentinc/cp-kafka:5.1.0
+    build: ./kafka-prometheus
     ports:
     - 19092:19092
+    - 15556:5556
     environment:
     # required
     - KAFKA_ZOOKEEPER_CONNECT=zk-1:2181,zk-2:2181,zk-3:2181
     - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
-    - KAFKA_ADVERTISED_LISTENERS=INTERNAL_PLAINTEXT://kafka-2:9093,EXTERNAL_PLAINTEXT://localhost:19092
+    - KAFKA_ADVERTISED_LISTENERS=INTERNAL_PLAINTEXT://kafka-2:9093,EXTERNAL_PLAINTEXT://host.docker.internal:19092
     - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL_PLAINTEXT
     - KAFKA_LISTENERS=INTERNAL_PLAINTEXT://0.0.0.0:9093,EXTERNAL_PLAINTEXT://0.0.0.0:19092
     - KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE=false
@@ -105,18 +109,21 @@ services:
     - KAFKA_DEFAULT_REPLICATION_FACTOR=3
     - KAFKA_NUM_PARTITIONS=3
     # - KAFKA_JMX_PORT=9999
+    - EXTRA_ARGS=-javaagent:/usr/local/share/jars/jmx_prometheus_javaagent-0.3.1.jar=5556:/opt/jmx_exporter/config.yml
     volumes:
     - kafka-2-data:/var/lib/kafka/data
+    - ./jmx_exporter/config.yml:/opt/jmx_exporter/config.yml
 
   kafka-3:
-    image: confluentinc/cp-kafka:5.1.0
+    build: ./kafka-prometheus
     ports:
     - 29092:29092
+    - 25556:5556
     environment:
     # required
     - KAFKA_ZOOKEEPER_CONNECT=zk-1:2181,zk-2:2181,zk-3:2181
     - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL_PLAINTEXT:PLAINTEXT,EXTERNAL_PLAINTEXT:PLAINTEXT
-    - KAFKA_ADVERTISED_LISTENERS=INTERNAL_PLAINTEXT://kafka-3:9093,EXTERNAL_PLAINTEXT://localhost:29092
+    - KAFKA_ADVERTISED_LISTENERS=INTERNAL_PLAINTEXT://kafka-3:9093,EXTERNAL_PLAINTEXT://host.docker.internal:29092
     - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL_PLAINTEXT
     - KAFKA_LISTENERS=INTERNAL_PLAINTEXT://0.0.0.0:9093,EXTERNAL_PLAINTEXT://0.0.0.0:29092
     - KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE=false
@@ -126,5 +133,7 @@ services:
     - KAFKA_DEFAULT_REPLICATION_FACTOR=3
     - KAFKA_NUM_PARTITIONS=3
     # - KAFKA_JMX_PORT=9999
+    - EXTRA_ARGS=-javaagent:/usr/local/share/jars/jmx_prometheus_javaagent-0.3.1.jar=5556:/opt/jmx_exporter/config.yml
     volumes:
     - kafka-3-data:/var/lib/kafka/data
+    - ./jmx_exporter/config.yml:/opt/jmx_exporter/config.yml
