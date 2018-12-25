@@ -1,8 +1,17 @@
 version: '3'
 
 services:
-  connect:
+  ui:
+    image: landoop/kafka-connect-ui
+    ports:
+    - 8000:8000
+    environment:
+    - CONNECT_URL=http://worker-1:8083,http://worker-2:8083
+
+  worker-1:
     image: confluentinc/cp-kafka-connect
+    ports:
+    - 8083:8083
     environment:
     # required
     - CONNECT_BOOTSTRAP_SERVERS=host.docker.internal:9092
@@ -10,8 +19,13 @@ services:
     - CONNECT_CONFIG_STORAGE_TOPIC=quickstart-config
     - CONNECT_OFFSET_STORAGE_TOPIC=quickstart-offsets
     - CONNECT_STATUS_STORAGE_TOPIC=quickstart-status
+    - CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR=1
+    - CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR=1
+    - CONNECT_STATUS_STORAGE_REPLICATION_FACTOR=1
     - CONNECT_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
     - CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+    - CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=false
+    - CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=false
     - CONNECT_INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
     - CONNECT_INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
     - CONNECT_REST_ADVERTISED_HOST_NAME=host.docker.internal
@@ -19,3 +33,30 @@ services:
     # optional
     - CONNECT_LOG4J_LOGGERS=org.reflections=ERROR
     # - CONNECT_REST_PORT=28082
+    volumes:
+    - .:/data
+
+  # worker-2:
+  #   image: confluentinc/cp-kafka-connect
+  #   ports:
+  #   - 18083:8083
+  #   environment:
+  #   # required
+  #   - CONNECT_BOOTSTRAP_SERVERS=host.docker.internal:9092
+  #   - CONNECT_GROUP_ID=quickstart
+  #   - CONNECT_CONFIG_STORAGE_TOPIC=quickstart-config
+  #   - CONNECT_OFFSET_STORAGE_TOPIC=quickstart-offsets
+  #   - CONNECT_STATUS_STORAGE_TOPIC=quickstart-status
+  #   - CONNECT_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+  #   - CONNECT_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+  #   - CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE=false
+  #   - CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE=false
+  #   - CONNECT_INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+  #   - CONNECT_INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+  #   - CONNECT_REST_ADVERTISED_HOST_NAME=host.docker.internal
+  #   - CONNECT_PLUGIN_PATH=/usr/share/java
+  #   # optional
+  #   - CONNECT_LOG4J_LOGGERS=org.reflections=ERROR
+  #   # - CONNECT_REST_PORT=28082
+  #   volumes:
+  #   - .:/data
