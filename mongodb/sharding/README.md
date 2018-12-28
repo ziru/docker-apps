@@ -16,4 +16,4 @@ Step 3: Add shards to config servers
 Step 4: Test sharded cluster
 
 - connect to mongos
-- run commands in `enable-sharding.js`
+- run commands in `enable-ranged-sharding.js`, or `enable-hashed-sharding.js`
