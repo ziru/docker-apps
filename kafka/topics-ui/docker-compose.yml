@@ -4,7 +4,7 @@ services:
   topics-ui:
     image: landoop/kafka-topics-ui
     ports:
-    - 8000:8000
+    - 10090:8000
     environment:
     - KAFKA_REST_PROXY_URL=http://rest:8082
     - PROXY=true
@@ -18,3 +18,5 @@ services:
     - KAFKA_REST_HOST_NAME=host.docker.internal
     - KAFKA_REST_ZOOKEEPER_CONNECT=host.docker.internal:2181
     # - ACCESS_CONTROL_ALLOW_ORIGIN_DEFAULT=*
+    # optional
+    - KAFKA_REST_SCHEMA_REGISTRY_URL=http://host.docker.internal:8081

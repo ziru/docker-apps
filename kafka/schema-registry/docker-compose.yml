@@ -9,3 +9,14 @@ services:
     # required
     - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=host.docker.internal:2181
     - SCHEMA_REGISTRY_HOST_NAME=host.docker.internal
+    # enable cors to allow UI
+    - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS=GET,POST,PUT,OPTIONS
+    - SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN=*
+
+  ui:
+    image: landoop/schema-registry-ui
+    ports:
+    - 10080:8000
+    environment:
+    # use localhost for UI javacript to use schema-registry
+    - SCHEMAREGISTRY_URL=http://localhost:8081
