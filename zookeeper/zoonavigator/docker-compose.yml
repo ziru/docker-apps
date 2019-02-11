@@ -4,12 +4,13 @@ services:
   web:
     image: elkozmon/zoonavigator-web:latest
     ports:
-    - 8000:8000
+    - 28000:8000
     environment:
     - API_HOST=api
     - API_PORT=9000
     depends_on:
     - api
+
   api:
     image: elkozmon/zoonavigator-api:latest
     environment:
