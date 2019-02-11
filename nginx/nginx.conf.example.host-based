@@ -1,0 +1,18 @@
+events {}
+
+
+http {
+  server {
+    server_name foo.internal;
+    location / {
+      proxy_pass http://host.docker.internal:9393;
+    }
+  }
+
+  server {
+    server_name bar.internal;
+    location / {
+      proxy_pass http://host.docker.internal:3000;
+    }
+  }
+}
