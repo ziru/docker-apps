@@ -1,5 +1,8 @@
 version: '3.3'
 
+volumes:
+  jupyter-data: {}
+
 services:
   jupyter:
     image: jupyter/base-notebook:latest
@@ -11,5 +14,6 @@ services:
     ports:
       - "8888:8888"
     volumes:
+      - jupyter-data:/home/jovyan
       - /Users:/Users
       - ${HOME}/Google Drive/dev/jupyter/notebooks:/home/jovyan/work
