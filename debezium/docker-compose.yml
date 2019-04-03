@@ -1,0 +1,74 @@
+version: '3'
+
+volumes:
+  zk-data: {}
+  kafka-data: {}
+  mysql-data: {}
+
+services:
+  mysql:
+    image: debezium/example-mysql:0.8
+    ports:
+    - 3306:3306
+    environment:
+    - MYSQL_ROOT_PASSWORD=debezium
+    - MYSQL_USER=mysqluser
+    - MYSQL_PASSWORD=mysqlpw
+    volumes:
+    - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    ports:
+    - 2181:2181
+    environment:
+    # required
+    - ZOOKEEPER_CLIENT_PORT=2181
+    # optional
+    - ZOOKEEPER_TICK_TIME=2000
+    volumes:
+    - zk-data:/var/lib/zookeeper/data
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc -w 2 localhost 2181"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  kafka:
+    image: confluentinc/cp-kafka
+    ports:
+    - 9092:9092
+    # - 9999:9999
+    environment:
+    # required
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://host.docker.internal:9092
+    # optional
+    - KAFKA_BROKER_ID=1
+    - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    - KAFKA_DELETE_TOPIC_ENABLE=true
+    # - KAFKA_JMX_PORT=9999
+    volumes:
+    - kafka-data:/var/lib/kafka/data
+    depends_on:
+    - zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --zookeeper zookeeper:2181 --list"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  connect:
+    image: debezium/connect:0.8
+    ports:
+    - 8083:8083
+    environment:
+    - GROUP_ID=1
+    - CONFIG_STORAGE_TOPIC=my_connect_configs
+    - OFFSET_STORAGE_TOPIC=my_connect_offsets
+    - BOOTSTRAP_SERVERS=kafka:9092
